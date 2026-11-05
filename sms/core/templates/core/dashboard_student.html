@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="h3 mb-1">Hello, {{ student.user.first_name }}</h1>
+<p class="text-body-secondary">Class {{ student.std }}-{{ student.division }} · Roll {{ student.roll_no }} · {{ student.user.code }}</p>
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="stat"><i class="bi bi-calendar-check text-primary"></i><div><div class="stat-n">{{ att_pct }}%</div>Attendance ({{ att_total }} days)</div></div></div>
+  <div class="col-md-4"><div class="stat"><i class="bi bi-cash-coin text-success"></i><div><div class="stat-n">{{ paid }}/12</div>Months fees paid</div></div></div>
+  <div class="col-md-4"><div class="stat"><i class="bi bi-exclamation-circle {% if months_due %}text-danger{% else %}text-success{% endif %}"></i><div><div class="stat-n">{{ months_due }}</div>Months due</div></div></div>
+</div>
+{% if att_total and att_pct < 75 %}<div class="alert alert-warning"><i class="bi bi-exclamation-triangle"></i> Your attendance is below 75%.</div>{% endif %}
+{% include 'core/_notices.html' %}
+{% endblock %}

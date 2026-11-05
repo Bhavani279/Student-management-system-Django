@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}My results{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3"><h1 class="h3 mb-0">My results</h1><button class="btn btn-outline-secondary no-print" onclick="window.print()"><i class="bi bi-printer"></i> Print</button></div>
+{% for b in blocks %}
+<div class="card mb-3"><div class="card-header d-flex justify-content-between"><span class="fw-semibold">{{ b.exam.name }}</span><span>{{ b.exam.date|date:"d M Y" }}</span></div>
+  <table class="table mb-0"><thead><tr><th>Subject</th><th>Marks</th><th>Out of</th></tr></thead>
+  {% for m in b.marks %}<tr><td>{{ m.subject.name }}</td><td>{{ m.obtained|floatformat:"-2" }}</td><td>{{ b.exam.max_marks }}</td></tr>{% endfor %}
+  <tfoot><tr class="fw-bold"><td>Total</td><td>{{ b.total|floatformat:"-2" }}</td><td>{{ b.max }}</td></tr></tfoot></table>
+  <div class="card-footer">Percentage: <strong>{{ b.pct }}%</strong> · Grade: <span class="badge text-bg-primary">{{ b.grade }}</span></div></div>
+{% empty %}<div class="alert alert-info">No results published yet.</div>{% endfor %}
+{% endblock %}

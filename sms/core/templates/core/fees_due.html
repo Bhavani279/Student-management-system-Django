@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Fees due{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Fees due ({{ today.year }}, up to {{ today|date:"F" }})</h1>
+  {% if rows %}<a class="btn btn-outline-secondary" href="?export=csv"><i class="bi bi-download"></i> CSV</a>{% endif %}
+</div>
+{% if not structure %}<div class="alert alert-warning">Set the {{ today.year }} fee structure first.</div>{% endif %}
+<div class="card"><div class="table-responsive"><table class="table table-hover align-middle mb-0">
+  <thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Months due</th><th>Amount due</th><th></th></tr></thead>
+  {% for r in rows %}
+  <tr><td>{{ r.s.user.code }}</td><td>{{ r.s.full_name }}</td><td>{{ r.s.std }}-{{ r.s.division }}</td>
+    <td><span class="badge text-bg-danger">{{ r.due }}</span></td><td>{{ r.amount }}</td>
+    <td class="text-end"><a class="btn btn-sm btn-outline-success" href="{% url 'fees_student' r.s.pk %}">Collect</a></td></tr>
+  {% empty %}<tr><td colspan="6" class="text-center text-body-secondary py-4">Nobody has dues. 🎉</td></tr>{% endfor %}
+</table></div></div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="h3 mb-4">Welcome, {{ user.first_name|default:user.username }}</h1>
+<div class="row g-3">
+  <div class="col-lg-7">
+    {% for c in cards %}
+    <div class="card mb-3"><div class="card-body d-flex justify-content-between align-items-center">
+      <div><div class="h5 mb-1">{{ c.section }}</div><div class="text-body-secondary">{{ c.count }} students</div></div>
+      {% if c.marked %}<span class="badge text-bg-success">Attendance marked today</span>
+      {% else %}<a class="btn btn-warning" href="{% url 'attendance_mark' %}?section={{ c.section.pk }}">Mark today's attendance</a>{% endif %}
+    </div></div>
+    {% empty %}
+    <div class="card"><div class="card-body">You are not a class teacher yet.
+      <a class="btn btn-primary btn-sm ms-2" href="{% url 'class_claim' %}">Choose a class</a></div></div>
+    {% endfor %}
+  </div>
+  <div class="col-lg-5">{% include 'core/_notices.html' %}</div>
+</div>
+{% endblock %}

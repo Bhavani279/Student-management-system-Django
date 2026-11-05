@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">{{ title }}</h1><a class="btn btn-outline-secondary" href="{{ back }}">Back</a>
+</div>
+<div class="card"><div class="card-body">
+  <form method="post" novalidate class="row g-3">{% csrf_token %}
+    {% for e in form.non_field_errors %}<div class="col-12"><div class="alert alert-danger py-2">{{ e }}</div></div>{% endfor %}
+    {% for field in form %}
+      <div class="{% if field.name == 'address' or field.name == 'body' or field.name == 'qualification' %}col-12{% else %}col-md-6{% endif %}">
+        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% for e in field.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+      </div>
+    {% endfor %}
+    <div class="col-12"><button class="btn btn-primary">Save</button></div>
+  </form>
+</div></div>
+{% endblock %}

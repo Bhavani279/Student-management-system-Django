@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Notice board{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3"><h1 class="h3 mb-0">Notice board</h1>
+  {% if user.role == 'admin' or user.role == 'superadmin' %}<a class="btn btn-primary" href="{% url 'notice_add' %}"><i class="bi bi-plus-lg"></i> New notice</a>{% endif %}</div>
+{% for n in notices %}
+<div class="card mb-3"><div class="card-body">
+  <div class="d-flex justify-content-between"><h2 class="h5">{{ n.title }}</h2>
+    {% if user.role == 'admin' or user.role == 'superadmin' %}<a class="text-danger" href="{% url 'notice_delete' n.pk %}"><i class="bi bi-trash"></i></a>{% endif %}</div>
+  <div class="small text-body-secondary mb-2">{{ n.created_at|date:"d M Y, H:i" }} · {{ n.get_audience_display }}{% if n.created_by %} · {{ n.created_by.display_name }}{% endif %}</div>
+  <p class="mb-0" style="white-space:pre-line">{{ n.body }}</p></div></div>
+{% empty %}<div class="alert alert-info">No notices.</div>{% endfor %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}My attendance{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">My attendance</h1>
+<div class="row g-3 mb-3">
+  <div class="col-4"><div class="stat"><i class="bi bi-percent text-primary"></i><div><div class="stat-n">{{ pct }}%</div>Overall</div></div></div>
+  <div class="col-4"><div class="stat"><i class="bi bi-check2-circle text-success"></i><div><div class="stat-n">{{ present }}</div>Present</div></div></div>
+  <div class="col-4"><div class="stat"><i class="bi bi-x-circle text-danger"></i><div><div class="stat-n">{{ absent }}</div>Absent</div></div></div>
+</div>
+<div class="row g-3">
+  <div class="col-lg-7"><div class="card"><div class="card-header fw-semibold">Monthly attendance %</div><div class="card-body"><canvas id="monthChart" height="130"></canvas></div></div></div>
+  <div class="col-lg-5"><div class="card"><div class="card-header fw-semibold">Recent days</div>
+    <div style="max-height:360px;overflow:auto"><table class="table table-sm mb-0">
+      {% for r in records %}<tr><td>{{ r.date|date:"D, d M Y" }}</td><td>{% if r.present %}<span class="badge text-bg-success">Present</span>{% else %}<span class="badge text-bg-danger">Absent</span>{% endif %}</td></tr>
+      {% empty %}<tr><td class="text-body-secondary">No records yet.</td></tr>{% endfor %}</table></div></div></div>
+</div>
+{{ chart|json_script:"monthData" }}
+{% endblock %}
+{% block scripts %}
+<script>
+const d = JSON.parse(document.getElementById('monthData').textContent);
+new Chart(document.getElementById('monthChart'), {type:'line', data:{labels:d.labels, datasets:[{label:'%', data:d.data, tension:.3, fill:true}]}, options:{scales:{y:{min:0,max:100}}, plugins:{legend:{display:false}}}});
+</script>
+{% endblock %}

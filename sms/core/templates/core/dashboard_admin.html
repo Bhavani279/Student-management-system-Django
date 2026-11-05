@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="h3 mb-4">Welcome, {{ user.first_name|default:user.username }}</h1>
+<div class="row g-3 mb-4">
+  <div class="col-6 col-xl-3"><div class="stat"><i class="bi bi-people text-primary"></i><div><div class="stat-n">{{ students }}</div>Students</div></div></div>
+  <div class="col-6 col-xl-3"><div class="stat"><i class="bi bi-person-workspace text-success"></i><div><div class="stat-n">{{ faculty }}</div>Faculty</div></div></div>
+  <div class="col-6 col-xl-3"><div class="stat"><i class="bi bi-calendar-check text-warning"></i><div><div class="stat-n">{{ attendance_today }}%</div>Present today</div></div></div>
+  <div class="col-6 col-xl-3"><div class="stat"><i class="bi bi-cash-coin text-danger"></i><div><div class="stat-n">{{ collected|floatformat:0 }}</div>Fees collected {{ year }}</div></div></div>
+</div>
+<div class="row g-3">
+  <div class="col-lg-7"><div class="card h-100"><div class="card-header fw-semibold">Fee collection by month ({{ year }})</div><div class="card-body"><canvas id="feeChart" height="130"></canvas></div></div></div>
+  <div class="col-lg-5"><div class="card h-100"><div class="card-header fw-semibold">Students per class</div><div class="card-body"><canvas id="classChart" height="170"></canvas></div></div></div>
+  <div class="col-12">{% include 'core/_notices.html' %}</div>
+</div>
+{{ fee_chart|json_script:"feeData" }}
+{{ class_chart|json_script:"classData" }}
+{% endblock %}
+{% block scripts %}
+<script>
+const fee = JSON.parse(document.getElementById('feeData').textContent);
+new Chart(document.getElementById('feeChart'), {type:'bar', data:{labels:fee.labels, datasets:[{label:'Collected', data:fee.data, backgroundColor:'#0d6efd'}]}, options:{plugins:{legend:{display:false}}}});
+const cls = JSON.parse(document.getElementById('classData').textContent);
+new Chart(document.getElementById('classChart'), {type:'doughnut', data:{labels:cls.labels, datasets:[{data:cls.data}]}});
+</script>
+{% endblock %}

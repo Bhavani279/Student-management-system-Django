@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block auth %}
+<div class="card shadow-sm auth-card">
+  <div class="card-body p-4">
+    <div class="text-center mb-4">
+      <i class="bi bi-mortarboard-fill display-4 text-primary"></i>
+      <h1 class="h4 mt-2">EduManage</h1>
+      <p class="text-body-secondary small mb-0">Student Management System</p>
+    </div>
+    {% if form.errors %}<div class="alert alert-danger py-2">Invalid ID or password.</div>{% endif %}
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="mb-3"><label class="form-label">Login ID</label>
+        <input name="username" class="form-control" placeholder="e.g. ST10000" autofocus required></div>
+      <div class="mb-3"><label class="form-label">Password</label>
+        <div class="input-group"><input name="password" id="pw" type="password" class="form-control" required>
+          <button class="btn btn-outline-secondary" type="button" id="pwToggle"><i class="bi bi-eye"></i></button></div></div>
+      <button class="btn btn-primary w-100">Login</button>
+      <div class="text-center mt-3"><a href="{% url 'password_reset' %}" class="small">Forgot password?</a></div>
+    </form>
+  </div>
+</div>
+{% endblock %}

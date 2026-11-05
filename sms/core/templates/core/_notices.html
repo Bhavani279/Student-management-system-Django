@@ -1,0 +1,9 @@
+<div class="card h-100"><div class="card-header fw-semibold"><i class="bi bi-megaphone"></i> Latest notices</div>
+  <ul class="list-group list-group-flush">
+  {% for n in notices %}
+    <li class="list-group-item"><div class="fw-semibold">{{ n.title }}</div>
+      <div class="small text-body-secondary">{{ n.created_at|date:"d M Y" }} · {{ n.get_audience_display }}</div>
+      <div class="small mt-1">{{ n.body|truncatewords:30 }}</div></li>
+  {% empty %}<li class="list-group-item text-body-secondary">No notices yet.</li>{% endfor %}
+  </ul>
+</div>

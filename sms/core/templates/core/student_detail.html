@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}{{ s.full_name }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">{{ s.full_name }} <small class="text-body-secondary">{{ s.user.code }}</small></h1>
+  <div class="d-flex gap-2">
+    {% if user.role == 'admin' or user.role == 'superadmin' %}<a class="btn btn-outline-primary" href="{% url 'student_edit' s.pk %}">Edit</a><a class="btn btn-outline-success" href="{% url 'fees_student' s.pk %}">Fees</a>{% endif %}
+    <button class="btn btn-outline-secondary" onclick="window.print()"><i class="bi bi-printer"></i> Print</button>
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-md-6"><div class="card h-100"><div class="card-header fw-semibold">Personal details</div>
+    <dl class="row p-3 mb-0">
+      <dt class="col-5">Date of birth</dt><dd class="col-7">{{ s.dob|date:"d M Y" }} ({{ s.age }} yrs)</dd>
+      <dt class="col-5">Gender</dt><dd class="col-7">{{ s.user.gender }}</dd>
+      <dt class="col-5">Blood group</dt><dd class="col-7">{{ s.blood_group|default:"-" }}</dd>
+      <dt class="col-5">Phone</dt><dd class="col-7">{{ s.user.phone }}</dd>
+      <dt class="col-5">Email</dt><dd class="col-7">{{ s.user.email|default:"-" }}</dd>
+      <dt class="col-5">Address</dt><dd class="col-7">{{ s.user.address }}</dd>
+      <dt class="col-5">Father</dt><dd class="col-7">{{ s.father_name }} {% if s.father_occ %}({{ s.father_occ }}){% endif %}</dd>
+      <dt class="col-5">Mother</dt><dd class="col-7">{{ s.mother_name }} {% if s.mother_occ %}({{ s.mother_occ }}){% endif %}</dd>
+    </dl></div></div>
+  <div class="col-md-6"><div class="card h-100"><div class="card-header fw-semibold">Academic details</div>
+    <dl class="row p-3 mb-0">
+      <dt class="col-5">Class / Division</dt><dd class="col-7">{{ s.std }} - {{ s.division }}</dd>
+      <dt class="col-5">Roll no</dt><dd class="col-7">{{ s.roll_no }}</dd>
+      <dt class="col-5">Admission</dt><dd class="col-7">{{ s.doa|date:"d M Y" }}</dd>
+      <dt class="col-5">Class teacher</dt><dd class="col-7">{% if s.section.class_teacher %}{{ s.section.class_teacher.full_name }}{% else %}-{% endif %}</dd>
+      <dt class="col-5">Attendance</dt><dd class="col-7">{{ att_pct }}% ({{ att_total }} days)</dd>
+      <dt class="col-5">Fees paid {{ year }}</dt><dd class="col-7">{{ paid }} / 12 months</dd>
+    </dl></div></div>
+</div>
+{% endblock %}

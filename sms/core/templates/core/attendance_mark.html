@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Mark attendance{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Mark attendance</h1>
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-3"><select name="section" class="form-select" onchange="this.form.submit()">
+    {% for s in sections %}<option value="{{ s.pk }}" {% if s.pk == section.pk %}selected{% endif %}>{{ s }}</option>{% endfor %}</select></div>
+  <div class="col-md-3"><input type="date" name="date" value="{{ day|date:'Y-m-d' }}" max="{{ today|date:'Y-m-d' }}" class="form-control" onchange="this.form.submit()"></div>
+</form>
+{% if already %}<div class="alert alert-info py-2">Attendance already saved for this date. You can edit it below.</div>{% endif %}
+<form method="post">{% csrf_token %}
+  <input type="hidden" name="section" value="{{ section.pk }}"><input type="hidden" name="date" value="{{ day|date:'Y-m-d' }}">
+  <div class="card"><div class="card-header d-flex justify-content-between align-items-center">
+    <span class="fw-semibold">{{ section }} · {{ day|date:"d M Y" }}</span>
+    <div class="btn-group btn-group-sm"><button type="button" class="btn btn-outline-success" data-set-all="1">All present</button><button type="button" class="btn btn-outline-danger" data-set-all="0">All absent</button></div></div>
+  <div class="table-responsive"><table class="table align-middle mb-0">
+    <thead><tr><th>Roll</th><th>Name</th><th>ID</th><th class="text-center">Present</th></tr></thead>
+    {% for r in rows %}<tr><td>{{ r.s.roll_no }}</td><td>{{ r.s.full_name }}</td><td>{{ r.s.user.code }}</td>
+      <td class="text-center"><div class="form-check form-switch d-inline-block"><input class="form-check-input att-box" type="checkbox" name="present_{{ r.s.pk }}" {% if r.present %}checked{% endif %}></div></td></tr>
+    {% empty %}<tr><td colspan="4" class="text-center text-body-secondary py-4">No students in this class.</td></tr>{% endfor %}
+  </table></div>
+  {% if rows %}<div class="card-footer"><button class="btn btn-primary"><i class="bi bi-save"></i> Save attendance</button> <span class="small text-body-secondary ms-2"><span id="presentCount"></span></span></div>{% endif %}
+  </div>
+</form>
+{% endblock %}

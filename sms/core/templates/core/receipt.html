@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Receipt {{ p.receipt_no }}{% endblock %}
+{% block content %}
+<div class="card mx-auto" style="max-width:560px"><div class="card-body p-4">
+  <div class="text-center mb-3"><h1 class="h4 mb-0">Fee Receipt</h1><div class="text-body-secondary">{{ p.receipt_no }}</div></div>
+  <table class="table table-sm">
+    <tr><th>Student</th><td>{{ p.student.full_name }} ({{ p.student.user.code }})</td></tr>
+    <tr><th>Class</th><td>{{ p.student.std }}-{{ p.student.division }}, Roll {{ p.student.roll_no }}</td></tr>
+    <tr><th>For</th><td>{{ p.month_name }} {{ p.year }}</td></tr>
+    <tr><th>Amount</th><td class="fw-bold">{{ p.amount }}</td></tr>
+    <tr><th>Mode</th><td>{{ p.mode }}</td></tr>
+    <tr><th>Paid on</th><td>{{ p.paid_on|date:"d M Y" }}</td></tr>
+  </table>
+  <button class="btn btn-primary no-print" onclick="window.print()"><i class="bi bi-printer"></i> Print</button>
+</div></div>
+{% endblock %}
